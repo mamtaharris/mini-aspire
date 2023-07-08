@@ -11,7 +11,7 @@ func Users(db *gorm.DB) error {
 	var err error = nil
 	err = db.Create(&entities.Users{
 		Username:  "Mamta",
-		Password:  "Mamta",
+		Password:  "Mamta123",
 		Role:      "USER",
 		IsActive:  true,
 		CreatedAt: time.Now(),
@@ -23,7 +23,7 @@ func Users(db *gorm.DB) error {
 
 	err = db.Create(&entities.Users{
 		Username:  "Aspire",
-		Password:  "Aspire",
+		Password:  "Aspire123",
 		Role:      "ADMIN",
 		IsActive:  true,
 		CreatedAt: time.Now(),
