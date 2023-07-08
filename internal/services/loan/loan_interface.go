@@ -23,5 +23,6 @@ func NewService(loanRepo loanR.LoanRepo, repaymentRepo repaymentR.RepaymentRepo)
 
 //go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
 type LoanService interface {
-	CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.CreateLoanResp, error)
+	CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.LoanResp, error)
+	UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error)
 }

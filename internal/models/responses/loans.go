@@ -1,6 +1,6 @@
 package responses
 
-type CreateLoanResp struct {
+type LoanResp struct {
 	ID         int          `json:"loan_id"`
 	Amount     float64      `json:"amount"`
 	Term       int          `json:"term"`
