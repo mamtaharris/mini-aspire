@@ -13,7 +13,7 @@ type userRepo struct {
 }
 
 func NewRepo(writeDB *gorm.DB, readDB *gorm.DB) UserRepo {
-	return userRepo{writeDB: writeDB, readDB: readDB}
+	return &userRepo{writeDB: writeDB, readDB: readDB}
 }
 
 type UserRepo interface {
