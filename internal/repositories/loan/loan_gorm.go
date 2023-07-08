@@ -23,7 +23,7 @@ func (r *loanRepo) GetByID(ctx context.Context, loanID int) (entities.Loans, err
 	defer cancel()
 
 	loan := entities.Loans{}
-	result := r.readDB.WithContext(ctx).Where("loan_id = ?", loanID).Find(&loan)
+	result := r.readDB.WithContext(ctx).Where("loan_id = ?", loanID).Take(&loan)
 	if result.Error != nil {
 		return loan, result.Error
 	}

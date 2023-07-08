@@ -25,6 +25,35 @@ func (l *loanService) CreateLoan(ctx context.Context, req requests.CreateLoanReq
 	return resp, nil
 }
 
+func (l *loanService) UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error) {
+	loan, err := l.loanRepo.GetByID(ctx, loanID)
+	if err != nil {
+		return responses.LoanResp{}, nil
+	}
+	loan.Status = req.Status
+	loan, err = l.loanRepo.Update(ctx, loan)
+	if err != nil {
+		return responses.LoanResp{}, nil
+	}
+	resp, err := l.getResponseObject(ctx, loan)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	return resp, nil
+}
+
+func (l *loanService) GetLoan(ctx context.Context, loanID int) (responses.LoanResp, error) {
+	loan, err := l.loanRepo.GetByID(ctx, loanID)
+	if err != nil {
+		return responses.LoanResp{}, nil
+	}
+	resp, err := l.getResponseObject(ctx, loan)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	return resp, nil
+}
+
 func (l *loanService) createLoanEntity(ctx context.Context, req requests.CreateLoanReq) (entities.Loans, error) {
 	loan := entities.Loans{
 		Amount:  req.Amount,
@@ -54,23 +83,6 @@ func (l *loanService) createRepaymentEntity(ctx context.Context, loan entities.L
 		}
 	}
 	return nil
-}
-
-func (l *loanService) UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error) {
-	loan, err := l.loanRepo.GetByID(ctx, loanID)
-	if err != nil {
-		return responses.LoanResp{}, nil
-	}
-	loan.Status = req.Status
-	loan, err = l.loanRepo.Update(ctx, loan)
-	if err != nil {
-		return responses.LoanResp{}, nil
-	}
-	resp, err := l.getResponseObject(ctx, loan)
-	if err != nil {
-		return responses.LoanResp{}, err
-	}
-	return resp, nil
 }
 
 func (l *loanService) getResponseObject(ctx context.Context, loan entities.Loans) (responses.LoanResp, error) {

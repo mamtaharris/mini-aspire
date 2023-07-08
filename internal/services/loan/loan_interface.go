@@ -25,4 +25,5 @@ func NewService(loanRepo loanR.LoanRepo, repaymentRepo repaymentR.RepaymentRepo)
 type LoanService interface {
 	CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.LoanResp, error)
 	UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error)
+	GetLoan(ctx context.Context, loanID int) (responses.LoanResp, error)
 }
