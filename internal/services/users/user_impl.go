@@ -10,7 +10,6 @@ import (
 )
 
 func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, username string) (string, error) {
-
 	user, err := u.userRepository.GetByUsername(ctx, username)
 	if err != nil {
 		return "", err
@@ -18,15 +17,19 @@ func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, username
 	if !user.IsActive {
 		return "", errors.New("user is not active")
 	}
-	return "", nil
+
+	return generateToken(user.ID)
 }
 
-func generateToken(username string) string {
+func generateToken(userId int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
+		"username": userId,
 		"exp":      time.Now().Add(time.Hour * 2).Unix(), // Set expiration to 2 hours
 	})
 
-	tokenString, _ := token.SignedString([]byte(config.App.JwtSecret))
-	return tokenString
+	tokenString, err := token.SignedString([]byte(config.App.JwtSecret))
+	if err != nil {
+		return "", errors.New("failed to generate token")
+	}
+	return tokenString, nil
 }

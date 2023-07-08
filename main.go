@@ -15,11 +15,13 @@ func main() {
 	config.InitConfig()
 	logger.InitLogger()
 	db := database.InitDB()
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGQUIT)
-	defer stop()
-
+	ctx := context.Background()
 	err := cmd.Execute(ctx, db)
 	if err != nil {
 		logger.Log.Fatal(err.Error())
 	}
+	go func() {
+		_, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL, syscall.SIGQUIT)
+		defer stop()
+	}()
 }
