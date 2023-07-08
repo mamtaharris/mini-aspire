@@ -36,6 +36,8 @@ make server
 
 - Makefile - This file defines the set of tasks to be executed.
 
+- Aspire.postman_collection.json - This file can be imported to your postman workspace.
+
 ## Makefile
 
 Run the application
