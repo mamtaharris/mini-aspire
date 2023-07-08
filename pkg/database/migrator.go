@@ -12,10 +12,16 @@ type Migrate struct {
 
 func AutoMigrate(db *gorm.DB) []Migrate {
 	var users entities.Users
+	var loans entities.Loans
+	var repayments entities.Repayments
 
 	usersM := Migrate{TableName: "users", Run: func(db *gorm.DB) error { return db.AutoMigrate(&users) }}
+	loansM := Migrate{TableName: "loans", Run: func(db *gorm.DB) error { return db.AutoMigrate(&loans) }}
+	repaymentsM := Migrate{TableName: "repayments", Run: func(db *gorm.DB) error { return db.AutoMigrate(&repayments) }}
 
 	return []Migrate{
 		usersM,
+		loansM,
+		repaymentsM,
 	}
 }
