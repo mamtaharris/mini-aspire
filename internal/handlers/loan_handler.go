@@ -20,6 +20,18 @@ func NewLoanHandler(loanSvc loanS.LoanService, loanReqValidator loanV.LoanReqVal
 	}
 }
 
-func (h *LoanHandler) CreateLoanHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, "success")
+func (h *LoanHandler) CreateLoanHandler(ctx *gin.Context) {
+	req, err := h.loanReqValidator.ValidateCreateLoanReq(ctx)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	response, err := h.loanSvc.CreateLoan(ctx, req)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
 }

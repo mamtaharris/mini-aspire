@@ -4,16 +4,16 @@ import (
 	"time"
 )
 
-type Loans struct {
-	ID        int     `gorm:"column:loan_id;primaryKey;autoIncrement"`
+type Repayments struct {
+	ID        int     `gorm:"column:repayment_id;primaryKey;autoIncrement"`
+	LoanID    int     `gorm:"column:loan_id;"`
 	Amount    float64 `gorm:"column:amount;"`
-	Term      int     `gorm:"column:term;"`
 	Status    string  `gorm:"column:status;type:varchar(64)"`
 	UsersID   int     `gorm:"column:users_id;"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func (t *Loans) TableName() string {
-	return "loans"
+func (t *Repayments) TableName() string {
+	return "repayments"
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	handler "github.com/mamtaharris/mini-aspire/internal/handlers"
 	loanR "github.com/mamtaharris/mini-aspire/internal/repositories/loan"
+	repaymentR "github.com/mamtaharris/mini-aspire/internal/repositories/repayment"
 	loanS "github.com/mamtaharris/mini-aspire/internal/services/loan"
 	loanV "github.com/mamtaharris/mini-aspire/internal/validators/loan"
 
@@ -17,7 +18,8 @@ func SetRouter(ctx context.Context, db *gorm.DB) (*gin.Engine, error) {
 	router.HandleMethodNotAllowed = true
 
 	loanRepo := loanR.NewRepo(db, db)
-	loanSvc := loanS.NewService(loanRepo)
+	repaymentRepo := repaymentR.NewRepo(db, db)
+	loanSvc := loanS.NewService(loanRepo, repaymentRepo)
 	loanValidator := loanV.NewValidator()
 	loanHandler := handler.NewLoanHandler(loanSvc, loanValidator)
 

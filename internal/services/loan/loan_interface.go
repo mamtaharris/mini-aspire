@@ -5,16 +5,19 @@ import (
 
 	"github.com/mamtaharris/mini-aspire/internal/models/requests"
 	"github.com/mamtaharris/mini-aspire/internal/models/responses"
-	repo "github.com/mamtaharris/mini-aspire/internal/repositories/loan"
+	loanR "github.com/mamtaharris/mini-aspire/internal/repositories/loan"
+	repaymentR "github.com/mamtaharris/mini-aspire/internal/repositories/repayment"
 )
 
 type loanService struct {
-	loanRepo repo.LoanRepo
+	loanRepo      loanR.LoanRepo
+	repaymentRepo repaymentR.RepaymentRepo
 }
 
-func NewService(loanRepo repo.LoanRepo) LoanService {
+func NewService(loanRepo loanR.LoanRepo, repaymentRepo repaymentR.RepaymentRepo) LoanService {
 	return &loanService{
-		loanRepo: loanRepo,
+		loanRepo:      loanRepo,
+		repaymentRepo: repaymentRepo,
 	}
 }
 
