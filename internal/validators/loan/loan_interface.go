@@ -15,4 +15,5 @@ func NewValidator() LoanReqValidatorInterface {
 type LoanReqValidatorInterface interface {
 	ValidateCreateLoanReq(ctx *gin.Context) (requests.CreateLoanReq, error)
 	ValidateUpdateLoanReq(ctx *gin.Context) (requests.UpdateLoanReq, int, error)
+	ValidateGetLoanReq(ctx *gin.Context) (int, error)
 }

@@ -40,3 +40,11 @@ func (v *loanReqValidator) ValidateUpdateLoanReq(ctx *gin.Context) (requests.Upd
 	}
 	return reqBody, loanID, nil
 }
+
+func (v *loanReqValidator) ValidateGetLoanReq(ctx *gin.Context) (int, error) {
+	loanID, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return 0, err
+	}
+	return loanID, nil
+}
