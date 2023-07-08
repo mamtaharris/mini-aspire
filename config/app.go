@@ -7,8 +7,8 @@ import (
 )
 
 type AppConfig struct {
-	Name string `json:"APP_NAME"`
-	Port int    `json:"APP_PORT"`
+	Name string `envconfig:"APP_NAME"`
+	Port int    `envconfig:"APP_PORT"`
 }
 
 var App *AppConfig
