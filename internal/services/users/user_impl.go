@@ -17,7 +17,6 @@ func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, username
 	if !user.IsActive {
 		return "", errors.New("user is not active")
 	}
-
 	return generateToken(user.ID)
 }
 
