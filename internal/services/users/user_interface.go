@@ -8,11 +8,11 @@ import (
 )
 
 type userService struct {
-	userRepository users.UserRepo
+	userRepo users.UserRepo
 }
 
 func NewService(userRepo users.UserRepo) UserService {
-	return &userService{userRepository: userRepo}
+	return &userService{userRepo: userRepo}
 }
 
 type UserService interface {

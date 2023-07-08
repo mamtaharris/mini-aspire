@@ -12,7 +12,7 @@ import (
 )
 
 func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, loginReq requests.UserLoginReq) (string, error) {
-	user, err := u.userRepository.GetByUsername(ctx, loginReq.Username)
+	user, err := u.userRepo.GetByUsername(ctx, loginReq.Username)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return "", errors.New("credentials are incorrect")
