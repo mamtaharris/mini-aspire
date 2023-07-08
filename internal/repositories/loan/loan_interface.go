@@ -22,4 +22,6 @@ func NewRepo(writeDB, readDB *gorm.DB) LoanRepo {
 //go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
 type LoanRepo interface {
 	Create(ctx context.Context, loan entities.Loans) (entities.Loans, error)
+	GetByID(ctx context.Context, loanID int) (entities.Loans, error)
+	Update(ctx context.Context, loan entities.Loans) (entities.Loans, error)
 }

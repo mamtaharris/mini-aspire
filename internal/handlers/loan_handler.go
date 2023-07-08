@@ -36,3 +36,35 @@ func (h *LoanHandler) CreateLoanHandler(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (h *LoanHandler) UpdateLoanHandler(ctx *gin.Context) {
+	req, loanID, err := h.loanReqValidator.ValidateUpdateLoanReq(ctx)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusBadRequest, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	response, err := h.loanSvc.UpdateLoan(ctx, req, loanID)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusInternalServerError, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}
+
+func (h *LoanHandler) GetLoanHandler(ctx *gin.Context) {
+	loanID, err := h.loanReqValidator.ValidateGetLoanReq(ctx)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusBadRequest, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	response, err := h.loanSvc.GetLoan(ctx, loanID)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusInternalServerError, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}

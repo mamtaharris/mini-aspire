@@ -32,8 +32,10 @@ func SetRouter(ctx context.Context, db *gorm.DB) (*gin.Engine, error) {
 	userHandler := handler.NewUserHandler(userSvc, userValidator)
 	authMiddleware := middleware.NewAuthMiddleware(userRepo)
 	routerV1 := router.Group("/v1")
-	routerV1.POST("/loan", authMiddleware.Authenticate, authMiddleware.Authorize("ADMIN"), loanHandler.CreateLoanHandler)
 	routerV1.POST("/login", userHandler.Login)
+	routerV1.POST("/loan", authMiddleware.Authenticate, authMiddleware.Authorize("ADMIN"), loanHandler.CreateLoanHandler)
+	routerV1.PUT("/loan/:id", loanHandler.UpdateLoanHandler)
+	routerV1.GET("/loan/:id", loanHandler.GetLoanHandler)
 
 	return router, nil
 }
