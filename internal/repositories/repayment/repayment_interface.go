@@ -23,4 +23,6 @@ func NewRepo(writeDB, readDB *gorm.DB) RepaymentRepo {
 type RepaymentRepo interface {
 	Create(ctx context.Context, repayment entities.Repayments) (entities.Repayments, error)
 	GetAllRepaymentsForLoanID(ctx context.Context, loanID int) ([]entities.Repayments, error)
+	GetByID(ctx context.Context, repaymentID int) (entities.Repayments, error)
+	Update(ctx context.Context, repayment entities.Repayments) (entities.Repayments, error)
 }

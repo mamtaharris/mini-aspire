@@ -48,3 +48,23 @@ func (v *loanReqValidator) ValidateGetLoanReq(ctx *gin.Context) (int, error) {
 	}
 	return loanID, nil
 }
+
+func (v *loanReqValidator) ValidateRepayLoanReq(ctx *gin.Context) (requests.RepayLoanReq, int, int, error) {
+	var reqBody requests.RepayLoanReq
+	err := validators.ValidateUnknownParams(&reqBody, ctx)
+	if err != nil {
+		return reqBody, 0, 0, err
+	}
+	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
+		return reqBody, 0, 0, err
+	}
+	loanID, err := strconv.Atoi(ctx.Param("loanID"))
+	if err != nil {
+		return reqBody, 0, 0, err
+	}
+	repaymentID, err := strconv.Atoi(ctx.Param("repaymentID"))
+	if err != nil {
+		return reqBody, 0, 0, err
+	}
+	return reqBody, loanID, repaymentID, nil
+}

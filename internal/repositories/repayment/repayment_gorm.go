@@ -29,3 +29,29 @@ func (r *repaymentRepo) GetAllRepaymentsForLoanID(ctx context.Context, loanID in
 	}
 	return repayments, nil
 }
+
+func (r *repaymentRepo) GetByID(ctx context.Context, repaymentID int) (entities.Repayments, error) {
+	ctx, cancel := context.WithTimeout(ctx, config.DB.QueryTimeout)
+	defer cancel()
+
+	repayments := entities.Repayments{}
+	result := r.readDB.WithContext(ctx).Where("repayment_id = ?", repaymentID).Find(&repayments)
+	if result.Error != nil {
+		return repayments, result.Error
+	}
+	return repayments, nil
+}
+
+func (r *repaymentRepo) Update(ctx context.Context, repayments entities.Repayments) (entities.Repayments, error) {
+	ctx, cancel := context.WithTimeout(ctx, config.DB.QueryTimeout)
+	defer cancel()
+
+	result := r.writeDB.WithContext(ctx).
+		Model(&repayments).
+		Where("repayment_id = ?", repayments.ID).
+		Updates(repayments)
+	if result.Error != nil {
+		return repayments, result.Error
+	}
+	return repayments, nil
+}

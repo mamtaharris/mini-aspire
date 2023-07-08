@@ -2,6 +2,7 @@ package loan
 
 import (
 	"context"
+	"errors"
 
 	"github.com/mamtaharris/mini-aspire/internal/constants"
 	"github.com/mamtaharris/mini-aspire/internal/models/entities"
@@ -28,12 +29,12 @@ func (l *loanService) CreateLoan(ctx context.Context, req requests.CreateLoanReq
 func (l *loanService) UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error) {
 	loan, err := l.loanRepo.GetByID(ctx, loanID)
 	if err != nil {
-		return responses.LoanResp{}, nil
+		return responses.LoanResp{}, err
 	}
 	loan.Status = req.Status
 	loan, err = l.loanRepo.Update(ctx, loan)
 	if err != nil {
-		return responses.LoanResp{}, nil
+		return responses.LoanResp{}, err
 	}
 	resp, err := l.getResponseObject(ctx, loan)
 	if err != nil {
@@ -45,7 +46,58 @@ func (l *loanService) UpdateLoan(ctx context.Context, req requests.UpdateLoanReq
 func (l *loanService) GetLoan(ctx context.Context, loanID int) (responses.LoanResp, error) {
 	loan, err := l.loanRepo.GetByID(ctx, loanID)
 	if err != nil {
-		return responses.LoanResp{}, nil
+		return responses.LoanResp{}, err
+	}
+	resp, err := l.getResponseObject(ctx, loan)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	return resp, nil
+}
+
+func (l *loanService) RepayLoan(ctx context.Context, req requests.RepayLoanReq, loanID int, repaymentID int) (responses.LoanResp, error) {
+	loan, err := l.loanRepo.GetByID(ctx, loanID)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	if loan.Status != constants.LoanStatus.Approved {
+		return responses.LoanResp{}, errors.New("You can repay only loans with status APPROVED")
+	}
+	repayment, err := l.repaymentRepo.GetByID(ctx, repaymentID)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	if repayment.LoanID != loanID {
+		return responses.LoanResp{}, errors.New("Invalid loan and repayment ID")
+	}
+	if req.Amount != repayment.Amount {
+		return responses.LoanResp{}, errors.New("Please provide correct amount")
+	}
+	if repayment.Status != constants.RepaymentStatus.Pending {
+		return responses.LoanResp{}, errors.New("Already paid")
+	}
+	repayment.Status = constants.RepaymentStatus.Paid
+	repayment, err = l.repaymentRepo.Update(ctx, repayment)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	repayments, err := l.repaymentRepo.GetAllRepaymentsForLoanID(ctx, loan.ID)
+	if err != nil {
+		return responses.LoanResp{}, err
+	}
+	isLoanRepaid := true
+	for _, r := range repayments {
+		if r.Status == constants.LoanStatus.Pending {
+			isLoanRepaid = false
+			break
+		}
+	}
+	if isLoanRepaid {
+		loan.Status = constants.LoanStatus.Paid
+		loan, err = l.loanRepo.Update(ctx, loan)
+		if err != nil {
+			return responses.LoanResp{}, err
+		}
 	}
 	resp, err := l.getResponseObject(ctx, loan)
 	if err != nil {

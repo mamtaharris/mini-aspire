@@ -68,3 +68,19 @@ func (h *LoanHandler) GetLoanHandler(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (h *LoanHandler) RepayLoanHandler(ctx *gin.Context) {
+	req, loanID, repaymentID, err := h.loanReqValidator.ValidateRepayLoanReq(ctx)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusBadRequest, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	response, err := h.loanSvc.RepayLoan(ctx, req, loanID, repaymentID)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusInternalServerError, responses.ErrorResp{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}

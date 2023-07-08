@@ -27,6 +27,7 @@ func SetRouter(ctx context.Context, db *gorm.DB) (*gin.Engine, error) {
 	routerV1.POST("/loan", loanHandler.CreateLoanHandler)
 	routerV1.PUT("/loan/:id", loanHandler.UpdateLoanHandler)
 	routerV1.GET("/loan/:id", loanHandler.GetLoanHandler)
+	routerV1.POST("/loan/:loanID/repay/:repaymentID", loanHandler.RepayLoanHandler)
 
 	return router, nil
 }
