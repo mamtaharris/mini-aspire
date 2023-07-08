@@ -7,7 +7,7 @@ import (
 	"github.com/mamtaharris/mini-aspire/internal/models/entities"
 )
 
-func (u *userRepo) Create(ctx context.Context, user entities.Users) (entities.Users, error) {
+func (u userRepo) Create(ctx context.Context, user entities.Users) (entities.Users, error) {
 
 	ctx, cancel := context.WithTimeout(ctx, config.DB.QueryTimeout)
 	defer cancel()
@@ -19,7 +19,7 @@ func (u *userRepo) Create(ctx context.Context, user entities.Users) (entities.Us
 	return user, nil
 }
 
-func (u *userRepo) GetByUsername(ctx context.Context, username string) (entities.Users, error) {
+func (u userRepo) GetByUsername(ctx context.Context, username string) (entities.Users, error) {
 
 	ctx, cancel := context.WithTimeout(ctx, config.DB.QueryTimeout)
 	defer cancel()
