@@ -5,10 +5,14 @@ import (
 	"github.com/mamtaharris/mini-aspire/internal/models/requests"
 )
 
-type userReqValidator struct{}
+type userReqValidator struct {
+	validator ValidatorInterface
+}
 
-func NewUserValidator() UserReqValidatorInterface {
-	return &userReqValidator{}
+func NewUserValidator(validator ValidatorInterface) UserReqValidatorInterface {
+	return &userReqValidator{
+		validator: validator,
+	}
 }
 
 //go:generate mockgen -package mocks -source=user.go -destination=mocks/user_mocks.go
@@ -18,12 +22,12 @@ type UserReqValidatorInterface interface {
 
 func (v *userReqValidator) ValidateUserLoginReq(ctx *gin.Context) (requests.UserLoginReq, error) {
 	var reqBody requests.UserLoginReq
-	err := ValidateUnknownParams(&reqBody, ctx)
+	err := v.validator.ValidateUnknownParams(&reqBody, ctx)
 	if err != nil {
-		return reqBody, err
+		return requests.UserLoginReq{}, err
 	}
 	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
-		return reqBody, err
+		return requests.UserLoginReq{}, err
 	}
 	return reqBody, nil
 }

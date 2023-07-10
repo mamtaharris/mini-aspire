@@ -8,7 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ValidateUnknownParams(reqBody interface{}, ctx *gin.Context) error {
+type validator struct{}
+
+func NewValidator() ValidatorInterface {
+	return &validator{}
+}
+
+//go:generate mockgen -package mocks -source=helper.go -destination=mocks/helper_mocks.go
+type ValidatorInterface interface {
+	ValidateUnknownParams(reqBody interface{}, ctx *gin.Context) error
+}
+
+func (v *validator) ValidateUnknownParams(reqBody interface{}, ctx *gin.Context) error {
 	decoder := json.NewDecoder(ctx.Request.Body)
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(&reqBody)
