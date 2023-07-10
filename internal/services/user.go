@@ -43,9 +43,9 @@ func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, loginReq
 	return generateToken(user.ID)
 }
 
-func generateToken(userId int) (string, error) {
+func generateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId": userId,
+		"userID": userID,
 		"exp":    time.Now().Add(time.Hour * 2).Unix(), // Set expiration to 2 hours
 	})
 

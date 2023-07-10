@@ -22,6 +22,7 @@ func NewUserRepo(writeDB *gorm.DB, readDB *gorm.DB) UserRepo {
 type UserRepo interface {
 	Create(ctx context.Context, user entities.Users) (entities.Users, error)
 	GetByUsername(ctx context.Context, username string) (entities.Users, error)
+	GetByUserID(ctx context.Context, userID int) (entities.Users, error)
 }
 
 func (u *userRepo) Create(ctx context.Context, user entities.Users) (entities.Users, error) {
@@ -39,6 +40,17 @@ func (u *userRepo) GetByUsername(ctx context.Context, username string) (entities
 	defer cancel()
 	var user entities.Users
 	result := u.readDB.WithContext(ctx).Where("username = ?", username).Take(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+	return user, nil
+}
+
+func (u *userRepo) GetByUserID(ctx context.Context, userID int) (entities.Users, error) {
+	ctx, cancel := context.WithTimeout(ctx, config.DB.QueryTimeout)
+	defer cancel()
+	var user entities.Users
+	result := u.readDB.WithContext(ctx).Where("user_id = ?", userID).Take(&user)
 	if result.Error != nil {
 		return user, result.Error
 	}

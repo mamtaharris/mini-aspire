@@ -3,11 +3,11 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/mamtaharris/mini-aspire/config"
-	"github.com/mamtaharris/mini-aspire/internal/models/entities"
 	"github.com/mamtaharris/mini-aspire/internal/repositories"
 )
 
@@ -26,7 +26,7 @@ func (a *AuthMiddleware) Authenticate(c *gin.Context) {
 		c.Abort()
 		return
 	}
-
+	tokenString = strings.ReplaceAll(tokenString, "Bearer ", "")
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.App.JwtSecret), nil
 	})
@@ -38,18 +38,18 @@ func (a *AuthMiddleware) Authenticate(c *gin.Context) {
 	}
 
 	claims, _ := token.Claims.(jwt.MapClaims)
-	username := claims["userId"].(string)
+	userID := claims["userID"].(float64)
 
 	// Pass the authenticated username to the next handler
-	c.Set("userId", username)
+	c.Set("userID", int(userID))
 	c.Next()
 }
 
 // Middleware to authorize the user based on role
 func (a *AuthMiddleware) Authorize(role string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		username, _ := c.Get("username")
-		user, err := a.getUserByUsername(username.(string))
+		userID, _ := c.Get("userID")
+		user, err := a.userRepo.GetByUserID(context.Background(), userID.(int))
 		if err != nil {
 			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
 			c.Abort()
@@ -62,12 +62,4 @@ func (a *AuthMiddleware) Authorize(role string) gin.HandlerFunc {
 		}
 		c.Next()
 	}
-}
-
-func (a *AuthMiddleware) getUserByUsername(username string) (entities.Users, error) {
-	user, err := a.userRepo.GetByUsername(context.Background(), username)
-	if err != nil {
-		return entities.Users{}, err
-	}
-	return user, nil
 }
