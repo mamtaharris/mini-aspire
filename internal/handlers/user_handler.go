@@ -5,16 +5,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mamtaharris/mini-aspire/internal/models/responses"
-	"github.com/mamtaharris/mini-aspire/internal/services/users"
-	"github.com/mamtaharris/mini-aspire/internal/validators/user"
+	"github.com/mamtaharris/mini-aspire/internal/services"
+	"github.com/mamtaharris/mini-aspire/internal/validators"
 )
 
 type UserHandler struct {
-	userService   users.UserService
-	userValidator user.UserReqValidatorInterface
+	userService   services.UserService
+	userValidator validators.UserReqValidatorInterface
 }
 
-func NewUserHandler(userService users.UserService, userValidator user.UserReqValidatorInterface) *UserHandler {
+func NewUserHandler(userService services.UserService, userValidator validators.UserReqValidatorInterface) *UserHandler {
 	return &UserHandler{userService: userService, userValidator: userValidator}
 }
 

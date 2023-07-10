@@ -5,16 +5,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mamtaharris/mini-aspire/internal/models/responses"
-	loanS "github.com/mamtaharris/mini-aspire/internal/services/loan"
-	loanV "github.com/mamtaharris/mini-aspire/internal/validators/loan"
+	"github.com/mamtaharris/mini-aspire/internal/services"
+	"github.com/mamtaharris/mini-aspire/internal/validators"
 )
 
 type LoanHandler struct {
-	loanSvc          loanS.LoanService
-	loanReqValidator loanV.LoanReqValidatorInterface
+	loanSvc          services.LoanService
+	loanReqValidator validators.LoanReqValidatorInterface
 }
 
-func NewLoanHandler(loanSvc loanS.LoanService, loanReqValidator loanV.LoanReqValidatorInterface) *LoanHandler {
+func NewLoanHandler(loanSvc services.LoanService, loanReqValidator validators.LoanReqValidatorInterface) *LoanHandler {
 	return &LoanHandler{
 		loanSvc:          loanSvc,
 		loanReqValidator: loanReqValidator,

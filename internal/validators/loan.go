@@ -1,4 +1,4 @@
-package loan
+package validators
 
 import (
 	"errors"
@@ -7,12 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mamtaharris/mini-aspire/internal/constants"
 	"github.com/mamtaharris/mini-aspire/internal/models/requests"
-	"github.com/mamtaharris/mini-aspire/internal/validators"
 )
+
+type loanReqValidator struct{}
+
+func NewLoanValidator() LoanReqValidatorInterface {
+	return &loanReqValidator{}
+}
+
+//go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
+type LoanReqValidatorInterface interface {
+	ValidateCreateLoanReq(ctx *gin.Context) (requests.CreateLoanReq, error)
+	ValidateUpdateLoanReq(ctx *gin.Context) (requests.UpdateLoanReq, int, error)
+	ValidateGetLoanReq(ctx *gin.Context) (int, error)
+	ValidateRepayLoanReq(ctx *gin.Context) (requests.RepayLoanReq, int, int, error)
+}
 
 func (v *loanReqValidator) ValidateCreateLoanReq(ctx *gin.Context) (requests.CreateLoanReq, error) {
 	var reqBody requests.CreateLoanReq
-	err := validators.ValidateUnknownParams(&reqBody, ctx)
+	err := ValidateUnknownParams(&reqBody, ctx)
 	if err != nil {
 		return reqBody, err
 	}
@@ -24,7 +37,7 @@ func (v *loanReqValidator) ValidateCreateLoanReq(ctx *gin.Context) (requests.Cre
 
 func (v *loanReqValidator) ValidateUpdateLoanReq(ctx *gin.Context) (requests.UpdateLoanReq, int, error) {
 	var reqBody requests.UpdateLoanReq
-	err := validators.ValidateUnknownParams(&reqBody, ctx)
+	err := ValidateUnknownParams(&reqBody, ctx)
 	if err != nil {
 		return reqBody, 0, err
 	}
@@ -51,7 +64,7 @@ func (v *loanReqValidator) ValidateGetLoanReq(ctx *gin.Context) (int, error) {
 
 func (v *loanReqValidator) ValidateRepayLoanReq(ctx *gin.Context) (requests.RepayLoanReq, int, int, error) {
 	var reqBody requests.RepayLoanReq
-	err := validators.ValidateUnknownParams(&reqBody, ctx)
+	err := ValidateUnknownParams(&reqBody, ctx)
 	if err != nil {
 		return reqBody, 0, 0, err
 	}

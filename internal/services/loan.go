@@ -1,4 +1,4 @@
-package loan
+package services
 
 import (
 	"context"
@@ -8,7 +8,29 @@ import (
 	"github.com/mamtaharris/mini-aspire/internal/models/entities"
 	"github.com/mamtaharris/mini-aspire/internal/models/requests"
 	"github.com/mamtaharris/mini-aspire/internal/models/responses"
+
+	"github.com/mamtaharris/mini-aspire/internal/repositories"
 )
+
+type loanService struct {
+	loanRepo      repositories.LoanRepo
+	repaymentRepo repositories.RepaymentRepo
+}
+
+func NewLoanService(loanRepo repositories.LoanRepo, repaymentRepo repositories.RepaymentRepo) LoanService {
+	return &loanService{
+		loanRepo:      loanRepo,
+		repaymentRepo: repaymentRepo,
+	}
+}
+
+//go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
+type LoanService interface {
+	CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.LoanResp, error)
+	UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error)
+	GetLoan(ctx context.Context, loanID int) (responses.LoanResp, error)
+	RepayLoan(ctx context.Context, req requests.RepayLoanReq, loanID int, repaymentID int) (responses.LoanResp, error)
+}
 
 func (l *loanService) CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.LoanResp, error) {
 	loan, err := l.createLoanEntity(ctx, req)
