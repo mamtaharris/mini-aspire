@@ -5,6 +5,8 @@ required” and “loan term.” All the loans will be assumed to have a “week
 After the loan is approved, the user must be able to submit the weekly loan repayments. It can be a simplified repay functionality, which won’t
 need to check if the dates are correct but will just set the weekly amount to be repaid.
 
+Please check thw wiki page for more details.
+
 ## Getting Started
 
 Follow below steps to get the service running on your local machine.
