@@ -15,7 +15,7 @@ func NewLoanValidator() LoanReqValidatorInterface {
 	return &loanReqValidator{}
 }
 
-//go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
+//go:generate mockgen -package mocks -source=loan.go -destination=mocks/loan_mocks.go
 type LoanReqValidatorInterface interface {
 	ValidateCreateLoanReq(ctx *gin.Context) (requests.CreateLoanReq, error)
 	ValidateUpdateLoanReq(ctx *gin.Context) (requests.UpdateLoanReq, int, error)

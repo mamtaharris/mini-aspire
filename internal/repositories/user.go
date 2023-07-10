@@ -17,6 +17,8 @@ func NewUserRepo(writeDB *gorm.DB, readDB *gorm.DB) UserRepo {
 	return &userRepo{writeDB: writeDB, readDB: readDB}
 }
 
+//go:generate mockgen -package mocks -source=user.go -destination=mocks/user_mocks.go
+
 type UserRepo interface {
 	Create(ctx context.Context, user entities.Users) (entities.Users, error)
 	GetByUsername(ctx context.Context, username string) (entities.Users, error)

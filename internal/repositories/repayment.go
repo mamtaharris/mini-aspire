@@ -20,7 +20,7 @@ func NewRepaymentRepo(writeDB, readDB *gorm.DB) RepaymentRepo {
 	}
 }
 
-//go:generate mockgen -package mocks -source=repayment_interface.go -destination=mocks/repayment_interface_mocks.go
+//go:generate mockgen -package mocks -source=repayment.go -destination=mocks/repayment_mocks.go
 type RepaymentRepo interface {
 	Create(ctx context.Context, repayment entities.Repayments) (entities.Repayments, error)
 	GetAllRepaymentsForLoanID(ctx context.Context, loanID int) ([]entities.Repayments, error)

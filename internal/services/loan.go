@@ -24,7 +24,7 @@ func NewLoanService(loanRepo repositories.LoanRepo, repaymentRepo repositories.R
 	}
 }
 
-//go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
+//go:generate mockgen -package mocks -source=loan.go -destination=mocks/loan_mocks.go
 type LoanService interface {
 	CreateLoan(ctx context.Context, req requests.CreateLoanReq) (responses.LoanResp, error)
 	UpdateLoan(ctx context.Context, req requests.UpdateLoanReq, loanID int) (responses.LoanResp, error)

@@ -20,6 +20,8 @@ func NewUserService(userRepo repositories.UserRepo) UserService {
 	return &userService{userRepo: userRepo}
 }
 
+//go:generate mockgen -package mocks -source=user.go -destination=mocks/user_mocks.go
+
 type UserService interface {
 	ValidateUserAndGenerateToken(ctx context.Context, loginReq requests.UserLoginReq) (string, error)
 }

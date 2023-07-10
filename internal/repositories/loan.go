@@ -20,7 +20,7 @@ func NewLoanRepo(writeDB, readDB *gorm.DB) LoanRepo {
 	}
 }
 
-//go:generate mockgen -package mocks -source=loan_interface.go -destination=mocks/loan_interface_mocks.go
+//go:generate mockgen -package mocks -source=loan.go -destination=mocks/loan_mocks.go
 type LoanRepo interface {
 	Create(ctx context.Context, loan entities.Loans) (entities.Loans, error)
 	GetByID(ctx context.Context, loanID int) (entities.Loans, error)
