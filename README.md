@@ -64,7 +64,7 @@ Run linters
 make lint
 ```
 
-Run all tests
+Run all tests. Current test coverage is ~95%
 
 ```bash
 make test
