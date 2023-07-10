@@ -7,13 +7,159 @@
 	},
 	"item": [
 		{
-			"name": "Create Loan",
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"amount\": 100,\n    \"term\": 3\n}",
+					"raw": "{\n    \"username\": \"Mamta\",\n    \"password\": \"Mamta123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "User Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"Mamta\",\n    \"password\": \"Mamta123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jul 2023 22:13:01 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "132"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg4NjE1ODEsInVzZXJJZCI6Mn0.kq54l9tpig_QBDAViIgtpCt9JpspSAD3vL6UlXVZZi8\"\n}"
+				},
+				{
+					"name": "Admin Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Aspire\",\n    \"password\": \"Aspire123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 10 Jul 2023 17:29:57 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "132"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODkwMTczOTcsInVzZXJJRCI6M30.5L0yY-Rvb93r8JD7fvF4la3rNwEN1Ym0IDw3a92mygg\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Loan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"amount\": 100,\n        \"term\": 3\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -86,6 +232,16 @@
 		{
 			"name": "Approve Loan",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -165,6 +321,16 @@
 		{
 			"name": "Get Loan",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -226,6 +392,16 @@
 		{
 			"name": "Loan Repayment",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -238,7 +414,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/v1/loan/1/repay/3",
+					"raw": "http://localhost:8080/v1/loan/1/repay/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -249,7 +425,7 @@
 						"loan",
 						"1",
 						"repay",
-						"3"
+						"2"
 					]
 				}
 			},
@@ -355,83 +531,33 @@
 					"body": "{\n    \"loan_id\": 1,\n    \"amount\": 100,\n    \"term\": 3,\n    \"repayments\": [\n        {\n            \"repayment_id\": 1,\n            \"amount\": 33.333333333333336,\n            \"status\": \"PAID\"\n        },\n        {\n            \"repayment_id\": 3,\n            \"amount\": 33.333333333333336,\n            \"status\": \"PAID\"\n        },\n        {\n            \"repayment_id\": 2,\n            \"amount\": 33.333333333333336,\n            \"status\": \"PAID\"\n        }\n    ],\n    \"status\": \"PAID\"\n}"
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "Login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\":\"Mamta\",\n    \"password\": \"Mamta123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/v1/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"v1",
-						"login"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Login",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\":\"Mamta\",\n    \"password\": \"Mamta123\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/v1/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"login"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json; charset=utf-8"
-						},
-						{
-							"key": "Date",
-							"value": "Sat, 08 Jul 2023 22:13:01 GMT"
-						},
-						{
-							"key": "Content-Length",
-							"value": "132"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg4NjE1ODEsInVzZXJJZCI6Mn0.kq54l9tpig_QBDAViIgtpCt9JpspSAD3vL6UlXVZZi8\"\n}"
-				}
-			]
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODkwMTcyMTYsInVzZXJJRCI6Mn0.3_ojESYwHjLEbMzMaJpMe5_eds8AzVauooJFs6SleK0",
+			"type": "string"
 		}
 	]
 }
