@@ -8,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mamtaharris/mini-aspire/config"
 	"github.com/mamtaharris/mini-aspire/internal/models/entities"
-	"github.com/mamtaharris/mini-aspire/internal/repositories/users"
+	"github.com/mamtaharris/mini-aspire/internal/repositories"
 )
 
 type AuthMiddleware struct {
-	userRepo users.UserRepo
+	userRepo repositories.UserRepo
 }
 
-func NewAuthMiddleware(userRepo users.UserRepo) *AuthMiddleware {
+func NewAuthMiddleware(userRepo repositories.UserRepo) *AuthMiddleware {
 	return &AuthMiddleware{userRepo: userRepo}
 }
 

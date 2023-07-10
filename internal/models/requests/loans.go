@@ -8,3 +8,7 @@ type CreateLoanReq struct {
 type UpdateLoanReq struct {
 	Status string `json:"status"`
 }
+
+type RepayLoanReq struct {
+	Amount float64 `json:"amount"`
+}

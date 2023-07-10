@@ -1,4 +1,4 @@
-package users
+package services
 
 import (
 	"context"
@@ -8,8 +8,21 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/mamtaharris/mini-aspire/config"
 	"github.com/mamtaharris/mini-aspire/internal/models/requests"
+	"github.com/mamtaharris/mini-aspire/internal/repositories"
 	"gorm.io/gorm"
 )
+
+type userService struct {
+	userRepo repositories.UserRepo
+}
+
+func NewUserService(userRepo repositories.UserRepo) UserService {
+	return &userService{userRepo: userRepo}
+}
+
+type UserService interface {
+	ValidateUserAndGenerateToken(ctx context.Context, loginReq requests.UserLoginReq) (string, error)
+}
 
 func (u *userService) ValidateUserAndGenerateToken(ctx context.Context, loginReq requests.UserLoginReq) (string, error) {
 	user, err := u.userRepo.GetByUsername(ctx, loginReq.Username)
